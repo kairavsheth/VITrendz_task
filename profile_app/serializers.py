@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from profile_app.models import Profile, Friend, Tag
 
@@ -18,7 +19,9 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        print(validated_data)
+        if not validated_data['company'].lower() in validated_data['email'].lower():
+            raise ValidationError({'email': 'Email must contain company name'})
+
         tags = validated_data.pop('tags')
         friends = validated_data.pop('friends')
         instance = Profile.objects.create(**validated_data)

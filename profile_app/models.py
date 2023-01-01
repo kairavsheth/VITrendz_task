@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -23,10 +22,6 @@ class Profile(models.Model):
     longitude = models.DecimalField(max_digits=9, decimal_places=6, )
     latitude = models.DecimalField(max_digits=8, decimal_places=6, )
     greeting = models.TextField()
-
-    def clean(self):
-        if not self.company.lower() in self.email.lower():
-            raise ValidationError({'email': 'Email must contain company name'})
 
 
 class Friend(models.Model):
