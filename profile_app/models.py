@@ -24,6 +24,10 @@ class Profile(models.Model):
     latitude = models.DecimalField(max_digits=8, decimal_places=6, )
     greeting = models.TextField()
 
+    def clean(self):
+        if not self.company.lower() in self.email.lower():
+            raise ValidationError({'email': 'Email must contain company name'})
+
 
 class Friend(models.Model):
     uid = models.AutoField(primary_key=True)
