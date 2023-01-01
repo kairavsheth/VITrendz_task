@@ -11,9 +11,19 @@ class FriendSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     friends = FriendSerializer(many=True)
-    tags = serializers.ListSerializer(child=serializers.CharField(source='tags.title'))
+    tags = serializers.ListSerializer(child=serializers.CharField())
 
     class Meta:
         model = Profile
-        fields = ["guid", "isActive", "balance", "picture", "age", "eyeColor", "name", "gender", "company", "email",
-                  "phone", "address", "about", "registered", "longitude", "latitude", "friends", "tags", "greetings"]
+        fields = '__all__'
+
+    def create(self, validated_data):
+        print(validated_data)
+        tags = validated_data.pop('tags')
+        friends = validated_data.pop('friends')
+        instance = Profile.objects.create(**validated_data)
+        for i in tags:
+            Tag.objects.create(title=i, profile=instance)
+        for i in friends:
+            Friend.objects.create(profile=instance, **i)
+        return instance
