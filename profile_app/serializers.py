@@ -25,8 +25,10 @@ class ProfileSerializer(serializers.ModelSerializer):
         tags = validated_data.pop('tags')
         friends = validated_data.pop('friends')
         instance = Profile.objects.create(**validated_data)
+        print(instance)
         for i in tags:
             Tag.objects.create(title=i, profile=instance)
         for i in friends:
-            Friend.objects.create(profile=instance, **i)
+            i['profile'] = instance
+            Friend.objects.create(**i)
         return instance

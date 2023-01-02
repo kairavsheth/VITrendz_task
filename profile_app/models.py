@@ -1,11 +1,14 @@
+import uuid
+
 from django.db import models
+from django.utils import timezone
 
 
 # Create your models here.
 
 
 class Profile(models.Model):
-    guid = models.UUIDField(primary_key=True)
+    guid = models.UUIDField(primary_key=True, default=uuid.uuid4, )
     isActive = models.BooleanField()
     balance = models.CharField(max_length=16, )
     picture = models.URLField()
@@ -18,7 +21,7 @@ class Profile(models.Model):
     phone = models.CharField(max_length=32, )
     address = models.TextField()
     about = models.TextField()
-    registered = models.DateTimeField()
+    registered = models.DateTimeField(default=timezone.now)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, )
     latitude = models.DecimalField(max_digits=8, decimal_places=6, )
     greeting = models.TextField()
